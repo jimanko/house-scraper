@@ -63,7 +63,6 @@ def _get(url: str, referer: str | None = None, extra_headers: dict | None = None
     if extra_headers:
         headers.update(extra_headers)
     response = _SESSION.get(url, headers=headers, timeout=20)
-    response.raise_for_status()
     return response
 
 

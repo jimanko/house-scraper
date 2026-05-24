@@ -29,7 +29,11 @@ class XeScraper(BaseScraper):
             return []
 
         if resp.status_code == 403:
-            log.warning("XE: got 403 (Cloudflare) — skipping")
+            log.warning("XE: got 403 (bot protection) — skipping")
+            return []
+
+        if resp.status_code != 200:
+            log.error("XE: unexpected HTTP %d for %s", resp.status_code, search_url)
             return []
 
         soup = BeautifulSoup(resp.text, "html.parser")

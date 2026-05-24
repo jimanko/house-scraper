@@ -57,6 +57,18 @@ class SpitogatosScraper(BaseScraper):
             log.error("Spitogatos: request failed — %s", exc)
             return []
 
+        if resp.status_code == 403:
+            log.warning(
+                "Spitogatos: HTTP 403 — DataDome is blocking this IP or the reese84 "
+                "token was invalidated server-side. Refresh SPITOGATOS_COOKIE from "
+                "your browser and update the GitHub Secret."
+            )
+            return []
+
+        if resp.status_code != 200:
+            log.error("Spitogatos: unexpected HTTP %d for %s", resp.status_code, search_url)
+            return []
+
         if _BLOCKED_MARKER in resp.text:
             log.warning(
                 "Spitogatos: blocked by DataDome challenge — the reese84 cookie is "
