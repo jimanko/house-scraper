@@ -21,10 +21,14 @@ cd house-scraper
 searches:
   - name: "Spitogatos - Ενοικίαση Γαλάτσι"
     site: spitogatos
-    url: "https://www.spitogatos.gr/enoikiasi-katoikies/galatsi"
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/galatsi"
     filters:
       max_price: 800    # μέγιστη τιμή σε €
       min_size: 60      # ελάχιστο εμβαδόν σε τ.μ.
+
+email:
+  subject_prefix: "🏠 Νέα αγγελία"
+  # Η διεύθυνση αποστολής ορίζεται μέσω του GitHub Secret NOTIFICATION_EMAIL
 ```
 
 **Πώς βρίσκεις το URL:**
@@ -70,12 +74,14 @@ email:
 
 | Name | Value |
 |------|-------|
-| `GMAIL_USER` | το Gmail σου (π.χ. `yourname@gmail.com`) |
+| `NOTIFICATION_EMAIL` | η διεύθυνση που θέλεις να λαμβάνεις αγγελίες (π.χ. `yourname@gmail.com`) |
+| `GMAIL_USER` | το Gmail από το οποίο στέλνει ο scraper (π.χ. `sender@gmail.com`) |
 | `GMAIL_APP_PASSWORD` | ο 16ψήφιος κωδικός από το βήμα 4 Gmail |
 | `SPITOGATOS_COOKIE` | `reese84=<η τιμή που αντέγραψες παραπάνω>` |
 
 Εναλλακτικά με το GitHub CLI:
 ```bash
+gh secret set NOTIFICATION_EMAIL
 gh secret set GMAIL_USER
 gh secret set GMAIL_APP_PASSWORD
 gh secret set SPITOGATOS_COOKIE

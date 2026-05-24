@@ -215,7 +215,9 @@ def main() -> int:
     config = yaml.safe_load(CONFIG_FILE.read_text("utf-8"))
     searches = config.get("searches", [])
     email_cfg = config.get("email", {})
-    email_to = email_cfg.get("to", "")
+    # NOTIFICATION_EMAIL env var (GitHub Secret) takes precedence; fall back to
+    # config email.to for local runs where the env var may not be set.
+    email_to = os.environ.get("NOTIFICATION_EMAIL") or email_cfg.get("to", "")
     subject_prefix = email_cfg.get("subject_prefix", "🏠 Νέες αγγελίες")
 
     dry_run = os.environ.get("DRY_RUN", "").lower() in ("1", "true", "yes")

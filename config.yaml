@@ -103,7 +103,8 @@ searches:
         - "Ψυχικό"
 
 email:
-  to: "jimanko@gmail.com"
+  # Recipient address is set via the NOTIFICATION_EMAIL environment variable
+  # (GitHub Secret). No personal email should be committed here.
   subject_prefix: "🏠 Νέα αγγελία"
 
 # Update this date every time you refresh the SPITOGATOS_COOKIE secret.
