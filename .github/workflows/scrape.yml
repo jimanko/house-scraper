@@ -2,7 +2,7 @@ name: Scrape listings
 
 on:
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "*/30 5-22 * * *"
   workflow_dispatch:
 
 permissions:
