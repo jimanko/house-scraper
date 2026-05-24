@@ -1,0 +1,18 @@
+searches:
+  - name: "Spitogatos - Ενοικίαση Γαλάτσι"
+    site: spitogatos
+    url: "https://www.spitogatos.gr/enoikiasi-katoikies/galatsi"
+    filters:
+      max_price: 800
+      min_size: 60
+
+  - name: "XE - Ενοικίαση Γαλάτσι"
+    site: xe
+    url: "https://www.xe.gr/property/results?Geo.area_id_new=ATH-04&transaction_name=rent&item_type=re_residence"
+    filters:
+      max_price: 800
+      min_size: 60
+
+email:
+  to: "jimanko@gmail.com"
+  subject_prefix: "🏠 Νέα αγγελία"
