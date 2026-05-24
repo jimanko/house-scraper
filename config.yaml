@@ -16,3 +16,7 @@ searches:
 email:
   to: "jimanko@gmail.com"
   subject_prefix: "🏠 Νέα αγγελία"
+
+# Update this date every time you refresh the SPITOGATOS_COOKIE secret.
+cookie_expiry:
+  spitogatos: "2026-06-23"

@@ -6,7 +6,7 @@ import json
 import logging
 import os
 import sys
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 # Ensure UTF-8 stdout/stderr on Windows (avoids cp1252 encoding errors for Greek text)
@@ -92,6 +92,61 @@ def _passes(listing: Listing, filters: dict) -> bool:
 
 
 # ---------------------------------------------------------------------------
+# Cookie expiry check
+# ---------------------------------------------------------------------------
+
+def _check_cookie_expiry(config: dict, email_to: str, dry_run: bool) -> None:
+    expiry_cfg = config.get("cookie_expiry", {})
+    today = date.today()
+    for site, expiry_str in expiry_cfg.items():
+        try:
+            expiry = date.fromisoformat(str(expiry_str))
+        except ValueError:
+            log.warning("cookie_expiry.%s has invalid date format '%s' — skipping", site, expiry_str)
+            continue
+        days_left = (expiry - today).days
+        if days_left > 1:
+            log.info("Cookie expiry check — %s: %d days remaining (%s)", site, days_left, expiry)
+            continue
+        if days_left == 1:
+            msg = f"⚠️ Το cookie για το {site} λήγει αύριο ({expiry})! Ανανέωσέ το από το browser σου και ενημέρωσε το GitHub Secret SPITOGATOS_COOKIE."
+        elif days_left == 0:
+            msg = f"⚠️ Το cookie για το {site} λήγει ΣΗΜΕΡΑ ({expiry})! Ανανέωσέ το άμεσα."
+        else:
+            msg = f"⚠️ Το cookie για το {site} έχει ήδη λήξει ({expiry} — πριν {abs(days_left)} μέρες). Το {site} παραλείπεται μέχρι να το ανανεώσεις."
+        log.warning(msg)
+        if dry_run:
+            log.info("DRY_RUN — skipping cookie expiry warning email")
+            continue
+        if not email_to or email_to == "YOUR_EMAIL@gmail.com":
+            continue
+        subject = f"⚠️ Cookie {site} λήγει {'αύριο' if days_left == 1 else 'σήμερα' if days_left == 0 else 'έχει ληξει'}"
+        html = f"""<!DOCTYPE html>
+<html lang="el"><head><meta charset="utf-8"></head>
+<body style="background:#fafafa;padding:20px;font-family:Arial,sans-serif">
+<div style="max-width:520px;background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:20px">
+<h2 style="color:#856404;margin-top:0">⚠️ Cookie {site} — ανανέωση απαιτείται</h2>
+<p style="color:#333">{msg}</p>
+<h3 style="color:#333">Βήματα:</h3>
+<ol style="color:#333">
+  <li>Άνοιξε <a href="https://www.spitogatos.gr/enoikiaseis-katoikies/galatsi">spitogatos.gr</a> στο browser σου</li>
+  <li>F12 → Application → Cookies → www.spitogatos.gr</li>
+  <li>Αντέγραψε την τιμή του <strong>reese84</strong></li>
+  <li>Πήγαινε στο GitHub repo → Settings → Secrets → ενημέρωσε το <strong>SPITOGATOS_COOKIE</strong></li>
+  <li>Ενημέρωσε και το <strong>cookie_expiry.spitogatos</strong> στο <code>config.yaml</code></li>
+</ol>
+</div>
+<p style="font-size:11px;color:#999;margin-top:16px">house-scraper · GitHub Actions</p>
+</body></html>"""
+        plain = msg + "\n\nΒήματα:\n1. spitogatos.gr → F12 → Application → Cookies → αντέγραψε το reese84\n2. GitHub Secret SPITOGATOS_COOKIE → ενημέρωσε\n3. config.yaml cookie_expiry.spitogatos → ενημέρωσε"
+        try:
+            notifier.send_warning(subject, html, plain, email_to)
+            log.info("Cookie expiry warning email sent for %s", site)
+        except Exception as exc:
+            log.error("Failed to send cookie expiry warning: %s", exc)
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -105,6 +160,9 @@ def main() -> int:
     email_cfg = config.get("email", {})
     email_to = email_cfg.get("to", "")
     subject_prefix = email_cfg.get("subject_prefix", "🏠 Νέες αγγελίες")
+
+    dry_run = os.environ.get("DRY_RUN", "").lower() in ("1", "true", "yes")
+    _check_cookie_expiry(config, email_to, dry_run)
 
     seen = _load_seen()
     seen = _prune_seen(seen)
@@ -147,7 +205,6 @@ def main() -> int:
 
     if all_new:
         log.info("Sending email for %d new listing(s)…", len(all_new))
-        dry_run = os.environ.get("DRY_RUN", "").lower() in ("1", "true", "yes")
         if dry_run:
             log.info("DRY_RUN=1 — skipping real email send")
             for l in all_new:

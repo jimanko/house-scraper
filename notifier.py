@@ -58,6 +58,24 @@ def _build_html(listings: list[Listing]) -> str:
 </body></html>"""
 
 
+def send_warning(subject: str, body_html: str, body_plain: str, to: str) -> None:
+    """Send a plain warning email (cookie expiry, errors, etc.)."""
+    gmail_user = os.environ["GMAIL_USER"]
+    gmail_pass = os.environ["GMAIL_APP_PASSWORD"]
+
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = subject
+    msg["From"] = gmail_user
+    msg["To"] = to
+    msg.attach(MIMEText(body_plain, "plain", "utf-8"))
+    msg.attach(MIMEText(body_html, "html", "utf-8"))
+
+    ctx = ssl.create_default_context()
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=ctx) as srv:
+        srv.login(gmail_user, gmail_pass)
+        srv.sendmail(gmail_user, [to], msg.as_bytes())
+
+
 def send(listings: list[Listing], to: str, subject_prefix: str = "🏠 Νέες αγγελίες") -> None:
     """Send one consolidated HTML email for all new listings."""
     gmail_user = os.environ["GMAIL_USER"]
