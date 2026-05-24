@@ -92,6 +92,16 @@ class XeScraper(BaseScraper):
         img_el = card.select_one(".common-property-ad-image img[src]")
         image_url = img_el["src"] if img_el else None
 
+        # Floor: best-effort from feature list (not reliably present in XE list cards)
+        floor: int | None = None
+        floor_spans = card.select(".common-property-ad-details span")
+        for sp in floor_spans:
+            text = sp.get_text(strip=True)
+            fm = re.search(r"όροφος\s*:?\s*(-?\d+)", text, re.IGNORECASE)
+            if fm:
+                floor = int(fm.group(1))
+                break
+
         return Listing(
             id=listing_id,
             site="xe",
@@ -102,4 +112,5 @@ class XeScraper(BaseScraper):
             location=location,
             url=url,
             image_url=image_url,
+            floor=floor,
         )

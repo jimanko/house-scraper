@@ -1,17 +1,107 @@
+# Shared filter block — referenced by all searches via YAML anchors.
+# include_unknown: true means listings where floor/year_built is missing
+# from the list page still pass through (we can't always scrape these fields).
+x-default-filters: &default_filters
+  max_price: 900
+  min_size: 80
+  min_bedrooms: 2
+  max_bedrooms: 3
+  min_year_built: 1990
+  exclude_ground_floor: true
+  exclude_basement: true
+  include_unknown: true
+  required_keywords:
+    - "πάρκινγκ|parking|θέση στάθμευσης|στάθμευση"
+
 searches:
-  - name: "Spitogatos - Ενοικίαση Γαλάτσι"
+  # ── Spitogatos — one entry per area ───────────────────────────────────────
+  - name: "Spitogatos - Γαλάτσι"
     site: spitogatos
     url: "https://www.spitogatos.gr/enoikiaseis-katoikies/galatsi"
-    filters:
-      max_price: 800
-      min_size: 60
+    filters: *default_filters
 
-  - name: "XE - Ενοικίαση Γαλάτσι"
+  - name: "Spitogatos - Άνω Πατήσια"
+    site: spitogatos
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/ano-patisia"
+    filters: *default_filters
+
+  - name: "Spitogatos - Νέα Φιλαδέλφεια"
+    site: spitogatos
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/nea-filadelfia"
+    filters: *default_filters
+
+  - name: "Spitogatos - Νέο Ηράκλειο"
+    site: spitogatos
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/neo-irakleio"
+    filters: *default_filters
+
+  - name: "Spitogatos - Νέα Ιωνία"
+    site: spitogatos
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/nea-ionia"
+    filters: *default_filters
+
+  - name: "Spitogatos - Πεύκη"
+    site: spitogatos
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/pefki"
+    filters: *default_filters
+
+  - name: "Spitogatos - Χαλάνδρι"
+    site: spitogatos
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/halandri"
+    filters: *default_filters
+
+  - name: "Spitogatos - Χολαργός"
+    site: spitogatos
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/holargos"
+    filters: *default_filters
+
+  - name: "Spitogatos - Βριλήσσια"
+    site: spitogatos
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/vrilissia"
+    filters: *default_filters
+
+  - name: "Spitogatos - Μαρούσι"
+    site: spitogatos
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/marousi"
+    filters: *default_filters
+
+  - name: "Spitogatos - Παπάγου"
+    site: spitogatos
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/papagou"
+    filters: *default_filters
+
+  - name: "Spitogatos - Αγία Παρασκευή"
+    site: spitogatos
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/agia-paraskevi"
+    filters: *default_filters
+
+  - name: "Spitogatos - Ψυχικό"
+    site: spitogatos
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/psychiko"
+    filters: *default_filters
+
+  # ── XE — one broad Athens search with local location_filter ───────────────
+  # XE area codes (Geo.area_id_new) are ignored server-side — all return the
+  # same Athens-wide results. We use location_filter locally instead.
+  - name: "XE - Αθήνα (τοπικό φίλτρο περιοχών)"
     site: xe
-    url: "https://www.xe.gr/property/results?Geo.area_id_new=ATH-04&transaction_name=rent&item_type=re_residence"
+    url: "https://www.xe.gr/property/results?transaction_name=rent&item_type=re_residence"
     filters:
-      max_price: 800
-      min_size: 60
+      <<: *default_filters
+      location_filter:
+        - "Γαλάτσι"
+        - "Άνω Πατήσια"
+        - "Νέα Φιλαδέλφεια"
+        - "Νέο Ηράκλειο"
+        - "Νέα Ιωνία"
+        - "Πεύκη"
+        - "Χαλάνδρι"
+        - "Χολαργός"
+        - "Βριλήσσια"
+        - "Μαρούσι"
+        - "Παπάγου"
+        - "Αγία Παρασκευή"
+        - "Ψυχικό"
 
 email:
   to: "jimanko@gmail.com"

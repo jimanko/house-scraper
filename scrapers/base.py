@@ -55,7 +55,7 @@ _SESSION = _build_session()
 
 
 def _get(url: str, referer: str | None = None, extra_headers: dict | None = None):
-    delay = random.uniform(1.0, 3.0)
+    delay = random.uniform(2.0, 5.0)
     time.sleep(delay)
     headers = {}
     if referer:
@@ -78,6 +78,9 @@ class Listing:
     location: str
     url: str
     image_url: Optional[str]
+    year_built: Optional[int] = None
+    floor: Optional[int] = None
+    description: Optional[str] = None
 
 
 class BaseScraper(ABC):

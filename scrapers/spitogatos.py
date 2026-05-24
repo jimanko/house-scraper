@@ -128,6 +128,14 @@ class SpitogatosScraper(BaseScraper):
         if img_el:
             image_url = img_el.get("src") or img_el.get("data-src")
 
+        # Floor: best-effort from tile feature list (not always present in list view)
+        floor: int | None = None
+        floor_li = card.select_one("li[title='Επίπεδο'] span span, li[title='Όροφος'] span span")
+        if floor_li:
+            fm = re.search(r"-?\d+", floor_li.get_text())
+            if fm:
+                floor = int(fm.group())
+
         return Listing(
             id=listing_id,
             site="spitogatos",
@@ -138,4 +146,5 @@ class SpitogatosScraper(BaseScraper):
             location=location,
             url=url,
             image_url=image_url,
+            floor=floor,
         )
