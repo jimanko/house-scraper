@@ -50,7 +50,18 @@ email:
 3. Πάτα **Create**
 4. Σημείωσε τον 16ψήφιο κωδικό που εμφανίζεται — **δεν φαίνεται ξανά**
 
-### 4. Προσθήκη GitHub Secrets
+### 4. Cookie για Spitogatos (απαιτείται)
+
+Το spitogatos.gr χρησιμοποιεί σύστημα bot-protection που απαιτεί cookie από πραγματικό browser. Χωρίς αυτό το cookie, το spitogatos παραλείπεται αθόρυβα (το XE.gr συνεχίζει να δουλεύει κανονικά).
+
+**Πώς το βρίσκεις:**
+1. Άνοιξε το `https://www.spitogatos.gr/enoikiaseis-katoikies/galatsi` στο Chrome/Edge και περίμενε να φορτώσουν οι αγγελίες
+2. Πάτα **F12** → tab **Application** → **Cookies** → `https://www.spitogatos.gr`
+3. Βρες τη γραμμή με **Name** = `reese84` και αντέγραψε ολόκληρη την **Value**
+
+> **Προσοχή:** Το cookie λήγει περίπου κάθε **ένα μήνα**. Όταν λήξει, θα εμφανίζεται μήνυμα `blocked by DataDome` στα logs και το spitogatos θα παραλείπεται. Απλά επανάλαβε αυτά τα βήματα και ενημέρωσε το secret.
+
+### 5. Προσθήκη GitHub Secrets
 
 Στο repo σου στο GitHub:
 
@@ -60,20 +71,22 @@ email:
 | Name | Value |
 |------|-------|
 | `GMAIL_USER` | το Gmail σου (π.χ. `yourname@gmail.com`) |
-| `GMAIL_APP_PASSWORD` | ο 16ψήφιος κωδικός από το βήμα 3 |
+| `GMAIL_APP_PASSWORD` | ο 16ψήφιος κωδικός από το βήμα 4 Gmail |
+| `SPITOGATOS_COOKIE` | `reese84=<η τιμή που αντέγραψες παραπάνω>` |
 
 Εναλλακτικά με το GitHub CLI:
 ```bash
 gh secret set GMAIL_USER
 gh secret set GMAIL_APP_PASSWORD
+gh secret set SPITOGATOS_COOKIE
 ```
 
-### 5. Ενεργοποίηση Actions
+### 6. Ενεργοποίηση Actions
 
 1. Πήγαινε στο tab **Actions** του repo σου
 2. Αν σου ζητηθεί, πάτα **"I understand my workflows, go ahead and enable them"**
 
-### 6. Πρώτο τεστ
+### 7. Πρώτο τεστ
 
 Τρέξε το workflow χειροκίνητα για να επαληθεύσεις ότι λειτουργεί:
 1. Actions → **Scrape listings** → **Run workflow**

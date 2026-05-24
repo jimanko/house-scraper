@@ -5,6 +5,11 @@ is called `reese84` (not `datadome`). Provide it via the SPITOGATOS_COOKIE
 env var (value: `reese84=<value from browser DevTools>`). Without it every
 request returns the 2752-char "Pardon Our Interruption" challenge page.
 
+The reese84 cookie expires roughly every month. When it does, the scraper
+logs a "blocked" warning and returns no results. Refresh it by visiting
+spitogatos.gr in your browser, copying the updated reese84 cookie value
+from DevTools → Application → Cookies, and updating the GitHub Secret.
+
 Card structure (Nuxt.js SSR, verified):
   cards:    div.tile.tile--horizontal
   id/url:   a.tile__link[href]  →  /aggelia/<numeric-id>
