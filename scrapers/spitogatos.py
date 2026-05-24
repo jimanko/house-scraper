@@ -24,35 +24,59 @@ from __future__ import annotations
 
 import logging
 import os
+import random
 import re
+import time
 from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
+from curl_cffi import requests as cf_requests
 
-from .base import BaseScraper, Listing, _get
+from .base import BaseScraper, Listing
 
 log = logging.getLogger(__name__)
 
 BASE = "https://www.spitogatos.gr"
 _BLOCKED_MARKER = "Pardon Our Interruption"
+_HEADERS = {
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept-Language": "el-GR,el;q=0.9,en-US;q=0.8,en;q=0.7",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Referer": BASE,
+}
+
+
+def _parse_cookie_str(cookie_str: str) -> dict[str, str]:
+    """Convert 'reese84=<val>; other=x' → {'reese84': '<val>', 'other': 'x'}."""
+    cookies: dict[str, str] = {}
+    for part in cookie_str.split(";"):
+        if "=" in part:
+            k, v = part.strip().split("=", 1)
+            cookies[k.strip()] = v.strip()
+    return cookies
 
 
 class SpitogatosScraper(BaseScraper):
     def fetch(self, search_url: str) -> list[Listing]:
         log.info("Spitogatos: fetching %s", search_url)
 
-        extra_headers = {}
-        cookie = os.environ.get("SPITOGATOS_COOKIE", "")
-        if cookie:
-            extra_headers["Cookie"] = cookie
-        else:
+        cookie_str = os.environ.get("SPITOGATOS_COOKIE", "")
+        if not cookie_str:
             log.warning(
                 "Spitogatos: SPITOGATOS_COOKIE not set — requests will likely be blocked "
                 "by DataDome. Set it to `reese84=<value>` from your browser cookies."
             )
+        cookies = _parse_cookie_str(cookie_str) if cookie_str else {}
 
+        time.sleep(random.uniform(2.0, 5.0))
         try:
-            resp = _get(search_url, referer=BASE, extra_headers=extra_headers)
+            resp = cf_requests.get(
+                search_url,
+                impersonate="chrome",
+                cookies=cookies,
+                headers=_HEADERS,
+                timeout=20,
+            )
         except Exception as exc:
             log.error("Spitogatos: request failed — %s", exc)
             return []
