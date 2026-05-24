@@ -11,7 +11,7 @@ permissions:
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -27,36 +27,12 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Install Playwright
-        run: pip install playwright
-
-      - name: Cache Playwright browser
-        uses: actions/cache@v4
-        id: pw-cache
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-chromium-${{ runner.os }}-v1
-
-      - name: Install Chromium (cache miss)
-        if: steps.pw-cache.outputs.cache-hit != 'true'
-        run: playwright install chromium --with-deps
-
-      - name: Install Chromium system deps (cache hit)
-        if: steps.pw-cache.outputs.cache-hit == 'true'
-        run: playwright install-deps chromium
-
-      - name: Refresh Spitogatos cookie via browser
-        env:
-          # Stored secret used as fallback if the browser challenge fails
-          SPITOGATOS_COOKIE_SECRET: ${{ secrets.SPITOGATOS_COOKIE }}
-        run: python tools/get_spitogatos_cookie.py
-
       - name: Run scraper
         env:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           NOTIFICATION_EMAIL: ${{ secrets.NOTIFICATION_EMAIL }}
-          # SPITOGATOS_COOKIE is injected via GITHUB_ENV by the previous step
+          SPITOGATOS_COOKIE: ${{ secrets.SPITOGATOS_COOKIE }}
         run: python main.py
 
       - name: Commit seen.json if changed
