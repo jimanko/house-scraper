@@ -10,74 +10,73 @@ x-default-filters: &default_filters
   exclude_ground_floor: true
   exclude_basement: true
   include_unknown: true
-  required_keywords:
-    - "πάρκινγκ|parking|θέση στάθμευσης|στάθμευση"
 
 searches:
   # ── Spitogatos — one entry per area ───────────────────────────────────────
+  # ?parking=true is passed as a URL parameter; spitogatos filters it server-side.
   - name: "Spitogatos - Γαλάτσι"
     site: spitogatos
-    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/galatsi"
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/galatsi?parking=true"
     filters: *default_filters
 
   - name: "Spitogatos - Άνω Πατήσια"
     site: spitogatos
-    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/ano-patisia"
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/ano-patisia?parking=true"
     filters: *default_filters
 
   - name: "Spitogatos - Νέα Φιλαδέλφεια"
     site: spitogatos
-    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/nea-filadelfia"
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/nea-filadelfia?parking=true"
     filters: *default_filters
 
   - name: "Spitogatos - Νέο Ηράκλειο"
     site: spitogatos
-    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/neo-irakleio"
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/neo-irakleio?parking=true"
     filters: *default_filters
 
   - name: "Spitogatos - Νέα Ιωνία"
     site: spitogatos
-    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/nea-ionia"
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/nea-ionia?parking=true"
     filters: *default_filters
 
   - name: "Spitogatos - Πεύκη"
     site: spitogatos
-    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/pefki"
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/pefki?parking=true"
     filters: *default_filters
 
   - name: "Spitogatos - Χαλάνδρι"
     site: spitogatos
-    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/halandri"
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/halandri?parking=true"
     filters: *default_filters
 
   - name: "Spitogatos - Χολαργός"
     site: spitogatos
-    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/holargos"
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/holargos?parking=true"
     filters: *default_filters
 
   - name: "Spitogatos - Βριλήσσια"
     site: spitogatos
-    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/vrilissia"
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/vrilissia?parking=true"
     filters: *default_filters
 
   - name: "Spitogatos - Μαρούσι"
     site: spitogatos
-    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/marousi"
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/marousi?parking=true"
     filters: *default_filters
 
   - name: "Spitogatos - Παπάγου"
     site: spitogatos
-    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/papagou"
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/papagou?parking=true"
     filters: *default_filters
 
   - name: "Spitogatos - Αγία Παρασκευή"
     site: spitogatos
-    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/agia-paraskevi"
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/agia-paraskevi?parking=true"
     filters: *default_filters
 
   - name: "Spitogatos - Ψυχικό"
     site: spitogatos
-    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/psychiko"
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/psychiko?parking=true"
     filters: *default_filters
 
   # ── XE — one broad Athens search with local location_filter ───────────────
