@@ -46,12 +46,12 @@ searches:
 
   - name: "Spitogatos - Χαλάνδρι"
     site: spitogatos
-    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/halandri?parking=true"
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/chalandri?parking=true"
     filters: *default_filters
 
   - name: "Spitogatos - Χολαργός"
     site: spitogatos
-    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/holargos?parking=true"
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/cholargos?parking=true"
     filters: *default_filters
 
   - name: "Spitogatos - Βριλήσσια"
