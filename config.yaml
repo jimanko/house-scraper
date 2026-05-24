@@ -1,7 +1,7 @@
 searches:
   - name: "Spitogatos - Ενοικίαση Γαλάτσι"
     site: spitogatos
-    url: "https://www.spitogatos.gr/enoikiasi-katoikies/galatsi"
+    url: "https://www.spitogatos.gr/enoikiaseis-katoikies/galatsi"
     filters:
       max_price: 800
       min_size: 60
