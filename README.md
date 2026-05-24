@@ -95,9 +95,56 @@ gh secret set SPITOGATOS_COOKIE
 
 ---
 
+## Ανανέωση Spitogatos cookie όταν λήξει
+
+### Πότε χρειάζεται
+
+Το cookie `reese84` λήγει περίπου **κάθε ένα μήνα**. Θα το καταλάβεις γιατί:
+- Θα λάβεις **⚠️ alert email** από το scraper (αποστέλλεται 1 μέρα πριν τη λήξη και την ημέρα λήξης)
+- Τα logs του Actions θα δείχνουν: `blocked by DataDome challenge`
+- Τα spitogatos αποτελέσματα θα είναι πάντα 0
+
+### Βήμα-βήμα ανανέωση
+
+1. **Άνοιξε το spitogatos.gr στο Chrome/Edge** και κάνε login αν χρειαστεί.  
+   Πήγαινε σε οποιαδήποτε σελίδα αναζήτησης, π.χ.:  
+   `https://www.spitogatos.gr/enoikiaseis-katoikies/galatsi`  
+   Περίμενε να φορτώσουν οι αγγελίες (σημαντικό — το cookie εκδίδεται μετά το JS challenge).
+
+2. **Άνοιξε τα DevTools**: πάτα `F12` (ή `Ctrl+Shift+I`)
+
+3. **Βρες το cookie**:  
+   Tab **Application** → αριστερά **Storage → Cookies** → `https://www.spitogatos.gr`  
+   Βρες τη γραμμή με **Name** = `reese84` και κάνε κλικ πάνω της.  
+   Αντέγραψε ολόκληρη την **Value** (είναι μακριά συμβολοσειρά).
+
+4. **Ενημέρωσε το GitHub Secret** — διάλεξε έναν από τους δύο τρόπους:
+
+   **Μέσω GitHub UI** (πιο εύκολο):  
+   Repo → **Settings → Secrets and variables → Actions** → `SPITOGATOS_COOKIE` → **Update**  
+   Βάλε ως τιμή: `reese84=<η τιμή που αντέγραψες>`
+
+   **Μέσω GitHub CLI** (αν έχεις εγκατεστημένο το `gh`):
+   ```bash
+   gh secret set SPITOGATOS_COOKIE
+   # Θα σε ρωτήσει την τιμή — γράψε: reese84=<τιμή>
+   ```
+
+5. **Ενημέρωσε την ημερομηνία λήξης** στο `config.yaml`:
+   ```yaml
+   cookie_expiry:
+     spitogatos: "YYYY-MM-DD"   # βάλε την ημερομηνία λήξης από το DevTools
+   ```
+   Η ημερομηνία φαίνεται στη στήλη **Expires** δίπλα στο cookie `reese84`.  
+   Κάνε commit + push αυτή την αλλαγή στο repo.
+
+6. **Επαλήθευση**: τρέξε το workflow χειροκίνητα (Actions → Run workflow) και βεβαιώσου ότι τα spitogatos logs δείχνουν αποτελέσματα και όχι `blocked`.
+
+---
+
 ## Σημείωση για το cron schedule
 
-Το GitHub Actions cron **δεν είναι ακριβές**. Το `*/15 * * * *` σημαίνει "κάθε 15 λεπτά το πολύ", αλλά υπό φορτίο οι runners μπορεί να καθυστερήσουν αρκετά λεπτά ή και περισσότερο. Αυτό είναι φυσιολογικό — το script απλώς τρέχει λίγο αργότερα από το αναμενόμενο.
+Το GitHub Actions cron **δεν είναι ακριβές**. Το `*/30 * * * *` σημαίνει "κάθε 30 λεπτά το πολύ", αλλά υπό φορτίο οι runners μπορεί να καθυστερήσουν αρκετά λεπτά ή και περισσότερο. Αυτό είναι φυσιολογικό — το script απλώς τρέχει λίγο αργότερα από το αναμενόμενο.
 
 ---
 
